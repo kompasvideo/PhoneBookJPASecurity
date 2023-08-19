@@ -15,12 +15,14 @@
             <h2>Notebook</h2>
         </div>
         <div class="col-2 text-center alert-secondary">
-            <h2>&nbsp;</h2>
+            <div>&nbsp;</div>
+            <div>&nbsp;</div>
         </div>
         <div class="col-1 alert-secondary">
             <div class="">
                 <form action="login">
-                    <button type="submit" class="btn btn-primary">Sign In</button>
+                    <input type="hidden" name="type" value="0" th:attr="value=${typeSign}"/>
+                    <button type="submit" class="btn btn-primary" th:attr="value=${signString}"/>
                 </form>
             </div>
         </div>

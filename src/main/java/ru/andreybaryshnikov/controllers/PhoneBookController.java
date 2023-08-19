@@ -17,6 +17,8 @@ public class PhoneBookController {
     @GetMapping(value = "/")
     public String showFirstView(Model model) {
         Iterable<PhoneBook> phoneBooks =  phoneBookService.getPhoneBooks();
+        model.addAttribute("typeSign",0);
+        model.addAttribute("signString","Sign in");
         model.addAttribute("phoneBooks",phoneBooks);
         return "PhoneBook/index";
     }
