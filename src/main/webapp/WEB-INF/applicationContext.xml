@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/data/jpa
+        http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+    <context:component-scan base-package="ru.andreybaryshnikov" />
+
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes" value = "text/plain;charset=UTF-8" />
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <mvc:resources mapping="/resources/**" location="/resources/" />
+
+    <bean id="templateResolver" class="org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver">
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".html"/>
+    </bean>
+
+    <bean id="templateEngine" class="org.thymeleaf.spring6.SpringTemplateEngine">
+        <property name="templateResolver" ref="templateResolver"/>
+        <property name="enableSpringELCompiler" value="true"/>
+    </bean>
+
+    <bean class="org.thymeleaf.spring6.view.ThymeleafViewResolver">
+        <property name="templateEngine" ref="templateEngine"/>
+        <property name="order" value="1"/>
+        <property name="viewNames" value="*"/>
+    </bean>
+
+    <context:property-placeholder location="classpath:database.properties"/>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!--Обеспечивает работу с транзакциями в Spring -->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="emf"/>
+    </bean>
+
+    <!-- EntityManagerFactory -->
+    <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <!--Поставщик данных - hibernate-->
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+        </property>
+        <!--поиск сущностей в этом пакете-->
+        <property name="packagesToScan"
+                  value="ru.andreybaryshnikov"/>
+        <!--детали конфигурации поставщика постоянства (hibernate) -->
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">
+                    org.hibernate.dialect.PostgreSQLDialect
+                </prop>
+                <prop key="hibernate.max_fetch_depth">3</prop>
+                <prop key="hibernate.jdbc.fetch_size">50</prop>
+                <prop key="hibernate.jdbc.batch_size">10</prop>
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${driver}" />
+        <property name="url" value="${url}" />
+        <property name="username" value="${username1}"/>
+        <property name="password" value="${password}"/>
+    </bean>
+
+    <!--Activates various annotations to be detected in bean classes: Spring's @Required and @Autowired and so on-->
+    <context:annotation-config/>
+
+    <!--Scanning components in base-package (look for annotations) -->
+    <context:component-scan base-package="ru.andreybaryshnikov"/>
+
+    <!-- Need for Repository abstraction -->
+    <jpa:repositories base-package="ru.andreybaryshnikov.repository" entity-manager-factory-ref="emf"
+                      transaction-manager-ref="transactionManager"/>
+</beans>
