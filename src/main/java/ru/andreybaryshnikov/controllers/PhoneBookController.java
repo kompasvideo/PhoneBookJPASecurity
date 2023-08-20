@@ -13,11 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class PhoneBookController {
     private PhoneBookService phoneBookService;
-    private UserDetailsService userDetailsService;
 
-    public PhoneBookController(PhoneBookService phoneBookService, UserDetailsService userDetailsService) {
+    public PhoneBookController(PhoneBookService phoneBookService) {
         this.phoneBookService = phoneBookService;
-        this.userDetailsService = userDetailsService;
     }
 
     @GetMapping(value = "/")
