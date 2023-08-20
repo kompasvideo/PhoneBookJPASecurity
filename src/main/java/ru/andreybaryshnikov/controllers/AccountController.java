@@ -15,6 +15,6 @@ public class AccountController {
     @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("phoneBook", phoneBookService.getNewPhoneBook());
-        return "Account/login";
+        return "redirect:/";
     }
 }
