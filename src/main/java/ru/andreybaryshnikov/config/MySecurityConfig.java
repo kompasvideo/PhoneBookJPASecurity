@@ -40,8 +40,11 @@ public class MySecurityConfig {
             .requestMatchers(new AntPathRequestMatcher("/addSaveRecord")).hasRole("ADMIN")
 //            .requestMatchers(new AntPathRequestMatcher("/deleteRecord/**")).hasRole("MANAGER")
 //            .requestMatchers(new AntPathRequestMatcher("/editRecord/**")).hasRole("HR")
-            .anyRequest().authenticated()
-        ).formLogin(Customizer.withDefaults())
+            .anyRequest().authenticated())
+            .formLogin((form) -> form
+                .loginPage("/login")
+                .permitAll()
+            )
             .logout((logout) -> logout.logoutSuccessUrl("/").permitAll());
         return http.build();
     }

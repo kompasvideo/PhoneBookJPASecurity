@@ -1,20 +1,16 @@
 package ru.andreybaryshnikov.controllers;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import ru.andreybaryshnikov.services.PhoneBookService;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class AccountController {
-    private PhoneBookService phoneBookService;
-
-    public AccountController(PhoneBookService phoneBookService) {
-        this.phoneBookService = phoneBookService;
+    @RequestMapping("/login")
+    String login() {
+        return "login";
     }
-    @GetMapping("/login")
-    public String login(Model model) {
-        model.addAttribute("phoneBook", phoneBookService.getNewPhoneBook());
-        return "redirect:/";
+    @RequestMapping("/logout")
+    String logout() {
+        return "logout";
     }
 }
