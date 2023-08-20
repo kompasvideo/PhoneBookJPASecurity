@@ -33,6 +33,7 @@ VALUES
     ('zaur', '{bcrypt}$2a$10$kUVfw6KmqCxakBcAEh6tpeBkqAV2Iv/fJ..JXev5mLsu5GpinwuAC', true),
     ('elena', '{bcrypt}$2a$10$elsLj5cfU7NuvOE0gi7Un.TcKv68BqMSAbYAwQzamZRWBofn.TNZK', true),
     ('ivan', '{bcrypt}$2a$10$NqEdz39PXWmErn/qsDUovOliTkfsCB0pH0J0R5GgR7lU879/9U0y2', true);
+
 /*
 user: zaur   password: zaur
 user: elena   password: elena
