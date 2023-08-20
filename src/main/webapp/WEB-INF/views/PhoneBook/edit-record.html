@@ -20,7 +20,7 @@
                 Edit record
             </div>
             <div class="card-body">
-                <form th:action="@{/editSaveRecord}" th:method="post" th:object="${phoneBook}">
+                <form th:action="@{/editSaveRecord}" th:method="PA" th:object="${phoneBook}">
                     <input type="hidden" name="id" th:field="*{phoneBookID}" />
                     Last name <input th:field="*{lastName}" class="form-control"/>
                     <br/>

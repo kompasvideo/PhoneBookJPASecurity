@@ -20,7 +20,7 @@
                 Add record
             </div>
             <div class="card-body">
-                <form th:action="@{/adaSaveRecord}" th:method="post" th:object="${phoneBook}">
+                <form th:action="@{/addSaveRecord}" th:method="PA" th:object="${phoneBook}">
                     <input type="hidden" name="id" th:field="*{phoneBookID}" />
                     Last name <input th:field="*{lastName}" class="form-control"/>
                     <br/>
