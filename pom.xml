@@ -83,6 +83,13 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-bom</artifactId>
+      <version>6.1.2</version>
+      <type>pom</type>
+      <scope>import</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-config</artifactId>
       <version>6.1.2</version>
     </dependency>
@@ -90,6 +97,12 @@
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-taglibs</artifactId>
       <version>6.1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.thymeleaf.extras</groupId>
+      <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+      <!-- Temporary explicit version to fix Thymeleaf bug -->
+      <version>3.1.1.RELEASE</version>
     </dependency>
   </dependencies>
   <build>
