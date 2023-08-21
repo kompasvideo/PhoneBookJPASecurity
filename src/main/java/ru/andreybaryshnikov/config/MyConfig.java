@@ -13,6 +13,13 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -20,6 +27,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
+import ru.andreybaryshnikov.exceptions.CustomAccessDeniedHandler;
+import ru.andreybaryshnikov.exceptions.CustomAuthenticationFailureHandler;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -85,11 +94,11 @@ public class MyConfig implements WebMvcConfigurer {
         entityManagerFactoryBean.setJpaVendorAdapter(hibernateJpaVendorAdapter());
         entityManagerFactoryBean.setPackagesToScan("ru.andreybaryshnikov");
         Properties hibernateProperties = new Properties();
-        hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-        hibernateProperties.setProperty("hibernate.max_fetch_depth", "3");
-        hibernateProperties.setProperty("hibernate.jdbc.fetch_size", "50");
-        hibernateProperties.setProperty("hibernate.jdbc.batch_siz", "10");
-        hibernateProperties.setProperty("hibernate.show_sql", "true");
+        hibernateProperties.setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
+        hibernateProperties.setProperty("hibernate.max_fetch_depth", environment.getProperty("hibernate.max_fetch_depth"));
+        hibernateProperties.setProperty("hibernate.jdbc.fetch_size", environment.getProperty("hibernate.jdbc.fetch_size"));
+        hibernateProperties.setProperty("hibernate.jdbc.batch_siz", environment.getProperty("hibernate.jdbc.batch_siz"));
+        hibernateProperties.setProperty("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
         entityManagerFactoryBean.setJpaProperties(hibernateProperties);
         entityManagerFactoryBean.afterPropertiesSet();
         return entityManagerFactoryBean.getObject();
@@ -101,4 +110,31 @@ public class MyConfig implements WebMvcConfigurer {
         jpaTransactionManager.setEntityManagerFactory(entityManagerFactory());
         return jpaTransactionManager;
     }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(Customizer.withDefaults())
+            .authorizeHttpRequests(authorize -> authorize
+                .anyRequest().authenticated()
+            )
+            .httpBasic(Customizer.withDefaults())
+            .formLogin(Customizer.withDefaults());
+        return http.build();
+    }
+
+//    @Bean
+//    public AuthenticationFailureHandler authenticationFailureHandler() {
+//        return new CustomAuthenticationFailureHandler();
+//    }
+//
+//    @Bean
+//    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+//        return new CustomAuthenticationSuccessHandler();
+//    }
+//
+//    @Bean
+//    public AccessDeniedHandler accessDeniedHandler() {
+//        return new CustomAccessDeniedHandler();
+//    }
 }

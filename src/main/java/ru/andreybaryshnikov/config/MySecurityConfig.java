@@ -1,9 +1,7 @@
 package ru.andreybaryshnikov.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -36,8 +34,8 @@ public class MySecurityConfig {
             .requestMatchers(new AntPathRequestMatcher("/deleteRecord")).hasRole("ADMIN")
             .requestMatchers(new AntPathRequestMatcher("/editRecord")).hasRole("ADMIN")
             .requestMatchers(new AntPathRequestMatcher("/editSaveRecord")).hasRole("ADMIN")
-            .requestMatchers(new AntPathRequestMatcher("/viewAddRecord")).hasRole("ADMIN")
-            .requestMatchers(new AntPathRequestMatcher("/addSaveRecord")).hasRole("ADMIN")
+            .requestMatchers(new AntPathRequestMatcher("/viewAddRecord")).hasRole("USER")
+            .requestMatchers(new AntPathRequestMatcher("/addSaveRecord")).hasRole("USER")
 //            .requestMatchers(new AntPathRequestMatcher("/deleteRecord/**")).hasRole("MANAGER")
 //            .requestMatchers(new AntPathRequestMatcher("/editRecord/**")).hasRole("HR")
             .anyRequest().authenticated())
